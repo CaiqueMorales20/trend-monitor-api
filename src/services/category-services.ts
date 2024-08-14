@@ -18,6 +18,12 @@ class CategoryServices implements ICategoryServices {
 
     return newCategory
   }
+
+  async deleteCategory({ id }: Pick<Category, 'id'>): Promise<Category> {
+    const deletedCategory = await prisma.category.delete({ where: { id } })
+
+    return deletedCategory
+  }
 }
 
 export { CategoryServices }

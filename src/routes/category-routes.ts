@@ -26,4 +26,16 @@ categoryRouter.post('/', async (req: Request, res: Response) => {
   }
 })
 
+categoryRouter.delete('/:id', async (req: Request, res: Response) => {
+  const id = Number(req.params.id)
+
+  try {
+    const deletedCategory = await categoryServices.deleteCategory({ id })
+
+    res.status(200).json(deletedCategory)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+})
+
 export { categoryRouter }
