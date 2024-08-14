@@ -1,0 +1,16 @@
+{
+  "name": "trend-monitor-api",
+  "module": "src/server.ts",
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^2.2.2",
+    "@types/bun": "latest",
+    "eslint": "^8"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "dev": "bun --watch src/server.ts"
+  },
+  "type": "module"
+}
