@@ -1,8 +1,11 @@
 import { Router, type Request, type Response } from 'express'
 import { CategoryServices } from '../services/category-services'
+import { authMiddleware } from '../middlaware/auth-middleware'
 
 const categoryRouter = Router()
 const categoryServices = new CategoryServices()
+
+categoryRouter.use(authMiddleware)
 
 categoryRouter.get('/', async (req: Request, res: Response) => {
   try {

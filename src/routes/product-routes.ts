@@ -1,9 +1,18 @@
 import { Router, type Request, type Response } from 'express'
 import { ProductServices } from '../services/product-services'
 import type { Product } from '@prisma/client'
+import { authMiddleware } from '../middlaware/auth-middleware'
 
 const productRouter = Router()
 const productServices = new ProductServices()
+
+interface CustomRequest extends Request {
+  user?: {
+    businessId: number
+  }
+}
+
+productRouter.use(authMiddleware)
 
 productRouter.get('/', async (req: Request, res: Response) => {
   try {
@@ -25,7 +34,7 @@ productRouter.get('/most-sold', async (req: Request, res: Response) => {
   }
 })
 
-productRouter.post('/', async (req: Request, res: Response) => {
+productRouter.post('/', async (req: CustomRequest, res: Response) => {
   const { name, price, quantity, categoryId } = req.body as Product
 
   try {
@@ -34,6 +43,7 @@ productRouter.post('/', async (req: Request, res: Response) => {
       price,
       quantity,
       categoryId,
+      businessId: req.user!.businessId,
     })
 
     res.status(200).json(product)

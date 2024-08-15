@@ -1,9 +1,12 @@
 import { Router, type Request, type Response } from 'express'
 import { SaleServices } from '../services/sale-services'
 import type { SaleInput } from '../types/sale-services'
+import { authMiddleware } from '../middlaware/auth-middleware'
 
 const saleRouter = Router()
 const saleServices = new SaleServices()
+
+saleRouter.use(authMiddleware)
 
 saleRouter.get('/', async (req: Request, res: Response) => {
   try {

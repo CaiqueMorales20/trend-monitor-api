@@ -7,10 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Business {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique
+  email      String     @unique
+  password   String
+  categories Category[]
+  products   Product[]
+  sales      Sale[]
+}
+
 model Category {
-  id       Int       @id @default(autoincrement())
-  name     String
-  products Product[]
+  id         Int       @id @default(autoincrement())
+  name       String
+  products   Product[]
+  Business   Business  @relation(fields: [businessId], references: [id])
+  businessId Int
 }
 
 model Product {
@@ -21,12 +33,16 @@ model Product {
   categoryId Int
   category   Category      @relation(fields: [categoryId], references: [id])
   sales      SaleProduct[]
+  Business   Business      @relation(fields: [businessId], references: [id])
+  businessId Int
 }
 
 model Sale {
-  id       Int           @id @default(autoincrement())
-  saleDate DateTime      @default(now())
-  products SaleProduct[]
+  id         Int           @id @default(autoincrement())
+  saleDate   DateTime      @default(now())
+  products   SaleProduct[]
+  Business   Business      @relation(fields: [businessId], references: [id])
+  businessId Int
 }
 
 model SaleProduct {

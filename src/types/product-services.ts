@@ -15,6 +15,7 @@ interface IProductServices {
     price,
     quantity,
     categoryId,
+    businessId,
   }: Omit<Product, 'id'>): Promise<Product>
 
   updateProductCategory({

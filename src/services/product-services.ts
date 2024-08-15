@@ -60,6 +60,7 @@ class ProductServices implements IProductServices {
     price,
     quantity,
     categoryId,
+    businessId,
   }: Omit<Product, 'id'>): Promise<Product> {
     const newProduct = await prisma.product.create({
       data: {
@@ -67,6 +68,7 @@ class ProductServices implements IProductServices {
         price,
         quantity,
         categoryId,
+        businessId,
       },
     })
 
