@@ -7,7 +7,9 @@ type CategoryWithQuantitySold = Category & {
 interface ICategoryServices {
   getAllCategories(): Promise<Category[]>
   getMostSoldCategories(): Promise<CategoryWithQuantitySold[]>
-  createCategory({ name }: Pick<Category, 'name'>): Promise<Category>
+  createCategory({
+    name,
+  }: Pick<Category, 'name' | 'businessId'>): Promise<Category>
   deleteCategory({ id }: Pick<Category, 'id'>): Promise<Category>
 }
 

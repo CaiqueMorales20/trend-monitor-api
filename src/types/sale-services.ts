@@ -8,7 +8,13 @@ type SaleInput = {
 interface ISaleServices {
   getAllSales(): Promise<Sale[]>
 
-  createSale({ products }: { products: SaleInput }): Promise<SaleProduct>
+  createSale({
+    products,
+    businessId,
+  }: {
+    products: SaleInput
+    businessId: number
+  }): Promise<SaleProduct>
 }
 
 export type { ISaleServices, SaleInput }

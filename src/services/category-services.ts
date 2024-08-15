@@ -26,10 +26,14 @@ class CategoryServices implements ICategoryServices {
     return mostSoldCategories
   }
 
-  async createCategory({ name }: { name: string }): Promise<Category> {
+  async createCategory({
+    name,
+    businessId,
+  }: Pick<Category, 'name' | 'businessId'>): Promise<Category> {
     const newCategory = await prisma.category.create({
       data: {
         name,
+        businessId,
       },
     })
 

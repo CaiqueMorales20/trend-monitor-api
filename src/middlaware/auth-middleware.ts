@@ -23,6 +23,8 @@ function authMiddleware(req: CustomRequest, res: Response, next: NextFunction) {
     if (typeof decoded === 'object' && 'businessId' in decoded) {
       req.user = decoded as { businessId: number }
       next()
+    } else if (typeof decoded === 'object' && 'admin' in decoded) {
+      next()
     } else {
       return res.status(401).send('Unauthorized')
     }

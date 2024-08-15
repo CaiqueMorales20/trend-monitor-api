@@ -19,11 +19,14 @@ class SaleServices implements ISaleServices {
 
   async createSale({
     products,
+    businessId,
   }: {
     products: SaleInput
+    businessId: number
   }): Promise<SaleProduct> {
     const newSale = await prisma.sale.create({
       data: {
+        businessId,
         products: {
           create: products.map((product) => ({
             quantity: product.quantity,
