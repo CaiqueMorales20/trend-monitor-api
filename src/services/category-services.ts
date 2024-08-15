@@ -1,12 +1,29 @@
 import type { Category } from '@prisma/client'
 import { prisma } from '../prisma/script'
-import type { ICategoryServices } from '../types/category-services'
+import type {
+  CategoryWithQuantitySold,
+  ICategoryServices,
+} from '../types/category-services'
+import { ProductServices } from './product-services'
+
+const productServices = new ProductServices()
 
 class CategoryServices implements ICategoryServices {
   async getAllCategories(): Promise<Category[]> {
     const categories = await prisma.category.findMany()
 
     return categories
+  }
+
+  async getMostSoldCategories(): Promise<CategoryWithQuantitySold[]> {
+    const mostSoldProducts = await productServices.getMostSoldProducts()
+
+    const mostSoldCategories = mostSoldProducts.map((product) => ({
+      ...product.category,
+      totalQuantitySold: product.totalQuantitySold,
+    }))
+
+    return mostSoldCategories
   }
 
   async createCategory({ name }: { name: string }): Promise<Category> {

@@ -1,5 +1,8 @@
 import type { Product } from '@prisma/client'
-import type { IProductServices } from '../types/product-services'
+import type {
+  IProductServices,
+  ProductWithSoldQuantity,
+} from '../types/product-services'
 import { prisma } from '../prisma/script'
 
 class ProductServices implements IProductServices {
@@ -11,6 +14,45 @@ class ProductServices implements IProductServices {
     })
 
     return products
+  }
+
+  async getMostSoldProducts(): Promise<ProductWithSoldQuantity[]> {
+    const mostSoldProducts = await prisma.saleProduct.groupBy({
+      by: ['productId'],
+      _sum: {
+        quantity: true,
+      },
+    })
+
+    const productIds = mostSoldProducts.map((product) => product.productId)
+
+    const products = await prisma.product.findMany({
+      where: {
+        id: {
+          in: productIds,
+        },
+      },
+      include: {
+        category: true,
+      },
+    })
+
+    const mostSoldProductsWithQuantity = products.map((product) => {
+      const totalQuantitySold =
+        mostSoldProducts.find(
+          (mostSoldProduct) => mostSoldProduct.productId === product.id,
+        )?._sum.quantity || 0
+      return {
+        ...product,
+        totalQuantitySold,
+      }
+    })
+
+    const sortedBySoldQuantity = mostSoldProductsWithQuantity.sort(
+      (a, b) => b.totalQuantitySold - a.totalQuantitySold,
+    )
+
+    return sortedBySoldQuantity
   }
 
   async createProduct({

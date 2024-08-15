@@ -15,6 +15,16 @@ productRouter.get('/', async (req: Request, res: Response) => {
   }
 })
 
+productRouter.get('/most-sold', async (req: Request, res: Response) => {
+  try {
+    const mostSoldProducts = await productServices.getMostSoldProducts()
+
+    res.status(200).json(mostSoldProducts)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+})
+
 productRouter.post('/', async (req: Request, res: Response) => {
   const { name, price, quantity, categoryId } = req.body as Product
 

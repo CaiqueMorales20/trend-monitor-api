@@ -1,7 +1,14 @@
-import type { Product } from '@prisma/client'
+import type { Category, Product } from '@prisma/client'
+
+type ProductWithSoldQuantity = Product & {
+  category: Category
+  totalQuantitySold: number
+}
 
 interface IProductServices {
   getAllProducts(): Promise<Product[]>
+
+  getMostSoldProducts(): Promise<ProductWithSoldQuantity[]>
 
   createProduct({
     name,
@@ -18,4 +25,4 @@ interface IProductServices {
   deleteProduct({ id }: Pick<Product, 'id'>): Promise<Product>
 }
 
-export type { IProductServices }
+export type { IProductServices, ProductWithSoldQuantity }

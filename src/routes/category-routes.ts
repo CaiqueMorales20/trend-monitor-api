@@ -14,6 +14,16 @@ categoryRouter.get('/', async (req: Request, res: Response) => {
   }
 })
 
+categoryRouter.get('/most-sold', async (req: Request, res: Response) => {
+  try {
+    const mostSoldCtegories = await categoryServices.getMostSoldCategories()
+
+    res.status(200).json(mostSoldCtegories)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+})
+
 categoryRouter.post('/', async (req: Request, res: Response) => {
   const { name } = req.body
 
