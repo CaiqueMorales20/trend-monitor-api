@@ -6,9 +6,13 @@ type ProductWithSoldQuantity = Product & {
 }
 
 interface IProductServices {
-  getAllProducts(): Promise<Product[]>
+  getAllProducts({
+    businessId,
+  }: Pick<Product, 'businessId'>): Promise<Product[]>
 
-  getMostSoldProducts(): Promise<ProductWithSoldQuantity[]>
+  getMostSoldProducts({
+    businessId,
+  }: Pick<Product, 'businessId'>): Promise<ProductWithSoldQuantity[]>
 
   createProduct({
     name,

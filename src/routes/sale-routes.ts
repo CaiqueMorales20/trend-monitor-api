@@ -6,6 +6,12 @@ import { authMiddleware } from '../middlaware/auth-middleware'
 const saleRouter = Router()
 const saleServices = new SaleServices()
 
+interface CustomRequest extends Request {
+  user?: {
+    businessId: number
+  }
+}
+
 saleRouter.use(authMiddleware)
 
 saleRouter.get('/', async (req: Request, res: Response) => {
@@ -18,11 +24,12 @@ saleRouter.get('/', async (req: Request, res: Response) => {
   }
 })
 
-saleRouter.post('/', async (req: Request, res: Response) => {
+saleRouter.post('/', async (req: CustomRequest, res: Response) => {
   const { products } = req.body as { products: SaleInput }
+  const businessId = req.user!.businessId
 
   try {
-    const newSale = await saleServices.createSale({ products })
+    const newSale = await saleServices.createSale({ products, businessId })
 
     res.status(200).json(newSale)
   } catch (err) {

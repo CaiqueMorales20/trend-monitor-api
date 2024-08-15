@@ -6,21 +6,31 @@ import type {
 import { prisma } from '../prisma/script'
 
 class ProductServices implements IProductServices {
-  async getAllProducts(): Promise<Product[]> {
+  async getAllProducts({
+    businessId,
+  }: Pick<Product, 'businessId'>): Promise<Product[]> {
     const products = await prisma.product.findMany({
       include: {
         category: true,
       },
+      where: { businessId },
     })
 
     return products
   }
 
-  async getMostSoldProducts(): Promise<ProductWithSoldQuantity[]> {
+  async getMostSoldProducts({
+    businessId,
+  }: Pick<Product, 'businessId'>): Promise<ProductWithSoldQuantity[]> {
     const mostSoldProducts = await prisma.saleProduct.groupBy({
       by: ['productId'],
       _sum: {
         quantity: true,
+      },
+      where: {
+        product: {
+          businessId,
+        },
       },
     })
 

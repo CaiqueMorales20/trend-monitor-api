@@ -9,14 +9,22 @@ import { ProductServices } from './product-services'
 const productServices = new ProductServices()
 
 class CategoryServices implements ICategoryServices {
-  async getAllCategories(): Promise<Category[]> {
-    const categories = await prisma.category.findMany()
+  async getAllCategories({
+    businessId,
+  }: Pick<Category, 'businessId'>): Promise<Category[]> {
+    const categories = await prisma.category.findMany({
+      where: { businessId },
+    })
 
     return categories
   }
 
-  async getMostSoldCategories(): Promise<CategoryWithQuantitySold[]> {
-    const mostSoldProducts = await productServices.getMostSoldProducts()
+  async getMostSoldCategories({
+    businessId,
+  }: Pick<Category, 'businessId'>): Promise<CategoryWithQuantitySold[]> {
+    const mostSoldProducts = await productServices.getMostSoldProducts({
+      businessId,
+    })
 
     const mostSoldCategories = mostSoldProducts.map((product) => ({
       ...product.category,

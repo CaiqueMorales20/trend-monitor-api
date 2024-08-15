@@ -14,9 +14,13 @@ interface CustomRequest extends Request {
 
 productRouter.use(authMiddleware)
 
-productRouter.get('/', async (req: Request, res: Response) => {
+productRouter.get('/', async (req: CustomRequest, res: Response) => {
+  const businessId = req.user!.businessId
+
   try {
-    const products = await productServices.getAllProducts()
+    const products = await productServices.getAllProducts({
+      businessId,
+    })
 
     res.status(200).json(products)
   } catch (err) {
@@ -24,9 +28,13 @@ productRouter.get('/', async (req: Request, res: Response) => {
   }
 })
 
-productRouter.get('/most-sold', async (req: Request, res: Response) => {
+productRouter.get('/most-sold', async (req: CustomRequest, res: Response) => {
+  const businessId = req.user!.businessId
+
   try {
-    const mostSoldProducts = await productServices.getMostSoldProducts()
+    const mostSoldProducts = await productServices.getMostSoldProducts({
+      businessId,
+    })
 
     res.status(200).json(mostSoldProducts)
   } catch (err) {
@@ -36,6 +44,7 @@ productRouter.get('/most-sold', async (req: Request, res: Response) => {
 
 productRouter.post('/', async (req: CustomRequest, res: Response) => {
   const { name, price, quantity, categoryId } = req.body as Product
+  const businessId = req.user!.businessId
 
   try {
     const product = await productServices.createProduct({
@@ -43,7 +52,7 @@ productRouter.post('/', async (req: CustomRequest, res: Response) => {
       price,
       quantity,
       categoryId,
-      businessId: req.user!.businessId,
+      businessId,
     })
 
     res.status(200).json(product)
