@@ -14,9 +14,11 @@ interface CustomRequest extends Request {
 
 saleRouter.use(authMiddleware)
 
-saleRouter.get('/', async (req: Request, res: Response) => {
+saleRouter.get('/', async (req: CustomRequest, res: Response) => {
+  const businessId = req.user!.businessId
+
   try {
-    const sales = await saleServices.getAllSales()
+    const sales = await saleServices.getAllSales({ businessId })
 
     res.status(200).json(sales)
   } catch (err) {

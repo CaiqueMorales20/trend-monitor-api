@@ -1,4 +1,4 @@
-import type { Sale, SaleProduct } from '@prisma/client'
+import type { Sale } from '@prisma/client'
 
 type SaleInput = {
   quantity: number
@@ -6,7 +6,7 @@ type SaleInput = {
 }[]
 
 interface ISaleServices {
-  getAllSales(): Promise<Sale[]>
+  getAllSales({ businessId }: Pick<Sale, 'businessId'>): Promise<Sale[]>
 
   createSale({
     products,
@@ -14,7 +14,7 @@ interface ISaleServices {
   }: {
     products: SaleInput
     businessId: number
-  }): Promise<SaleProduct>
+  }): Promise<Sale>
 }
 
 export type { ISaleServices, SaleInput }

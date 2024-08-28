@@ -1,10 +1,11 @@
-import type { Sale, SaleProduct } from '@prisma/client'
+import type { Sale } from '@prisma/client'
 import type { ISaleServices, SaleInput } from '../types/sale-services'
 import { prisma } from '../prisma/script'
 
 class SaleServices implements ISaleServices {
-  async getAllSales(): Promise<Sale[]> {
+  async getAllSales({ businessId }: Pick<Sale, 'businessId'>): Promise<Sale[]> {
     const sales = await prisma.sale.findMany({
+      where: { businessId },
       include: {
         products: {
           include: {
@@ -23,7 +24,7 @@ class SaleServices implements ISaleServices {
   }: {
     products: SaleInput
     businessId: number
-  }): Promise<SaleProduct> {
+  }): Promise<Sale> {
     const newSale = await prisma.sale.create({
       data: {
         businessId,
@@ -36,13 +37,20 @@ class SaleServices implements ISaleServices {
           })),
         },
       },
+      include: {
+        products: {
+          include: {
+            product: true,
+          },
+        },
+      },
     })
 
-    const newSaleProduct = await prisma.saleProduct.findUnique({
-      where: { id: newSale.id },
-    })
+    // const newSaleProduct = await prisma.saleProduct.findUnique({
+    //   where: { id: newSale.id },
+    // })
 
-    return newSaleProduct!
+    return newSale!
   }
 }
 
