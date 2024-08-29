@@ -14,7 +14,9 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "dev": "bun --watch src/server.ts"
+    "start": "bun src/server.ts",
+    "dev": "bun --watch src/server.ts",
+    "build": "bun build src/server.ts"
   },
   "type": "module",
   "dependencies": {

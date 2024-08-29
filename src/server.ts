@@ -11,7 +11,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-const PORT = 3333
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3333
 
 app.use('/', authRoutes)
 app.use('/category', categoryRouter)
