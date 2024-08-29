@@ -15,7 +15,10 @@ interface ISaleServices {
     businessId,
     limit,
     page,
-  }: Pick<Sale, 'businessId'> & LimitType): Promise<Sale[]>
+  }: Pick<Sale, 'businessId'> & LimitType): Promise<{
+    sales: Sale[]
+    totalCount: number
+  }>
 
   createSale({
     products,

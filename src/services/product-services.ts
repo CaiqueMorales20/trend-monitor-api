@@ -10,9 +10,10 @@ class ProductServices implements IProductServices {
     businessId,
     limit,
     page,
-  }: Pick<Product, 'businessId'> & { limit?: number; page?: number }): Promise<
-    Product[]
-  > {
+  }: Pick<Product, 'businessId'> & { limit?: number; page?: number }): Promise<{
+    products: Product[]
+    totalCount: number
+  }> {
     const products = await prisma.product.findMany({
       include: {
         category: true,
@@ -21,8 +22,11 @@ class ProductServices implements IProductServices {
       take: limit || 10,
       where: { businessId },
     })
+    const totalCount = await prisma.product.count({
+      where: { businessId },
+    })
 
-    return products
+    return { products, totalCount }
   }
 
   async getMostSoldProducts({

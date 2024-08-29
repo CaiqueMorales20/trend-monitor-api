@@ -11,7 +11,10 @@ class SaleServices implements ISaleServices {
     businessId,
     limit,
     page,
-  }: Pick<Sale, 'businessId'> & LimitType): Promise<Sale[]> {
+  }: Pick<Sale, 'businessId'> & LimitType): Promise<{
+    sales: Sale[]
+    totalCount: number
+  }> {
     const sales = await prisma.sale.findMany({
       where: { businessId },
       skip: limit && page ? (page - 1) * limit : 0,
@@ -24,8 +27,11 @@ class SaleServices implements ISaleServices {
         },
       },
     })
+    const totalCount = await prisma.sale.count({
+      where: { businessId },
+    })
 
-    return sales
+    return { sales, totalCount }
   }
 
   async createSale({

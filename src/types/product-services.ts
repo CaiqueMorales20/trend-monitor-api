@@ -13,7 +13,10 @@ type LimitType = {
 interface IProductServices {
   getAllProducts({
     businessId,
-  }: Pick<Product, 'businessId'> & LimitType): Promise<Product[]>
+  }: Pick<Product, 'businessId'> & LimitType): Promise<{
+    products: Product[]
+    totalCount: number
+  }>
 
   getMostSoldProducts({
     businessId,
