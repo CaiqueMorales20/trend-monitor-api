@@ -5,10 +5,15 @@ type ProductWithSoldQuantity = Product & {
   totalQuantitySold: number
 }
 
+type LimitType = {
+  limit?: number
+  page?: number
+}
+
 interface IProductServices {
   getAllProducts({
     businessId,
-  }: Pick<Product, 'businessId'>): Promise<Product[]>
+  }: Pick<Product, 'businessId'> & LimitType): Promise<Product[]>
 
   getMostSoldProducts({
     businessId,

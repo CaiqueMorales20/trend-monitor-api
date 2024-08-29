@@ -16,9 +16,11 @@ saleRouter.use(authMiddleware)
 
 saleRouter.get('/', async (req: CustomRequest, res: Response) => {
   const businessId = req.user!.businessId
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
 
   try {
-    const sales = await saleServices.getAllSales({ businessId })
+    const sales = await saleServices.getAllSales({ businessId, limit, page })
 
     res.status(200).json(sales)
   } catch (err) {

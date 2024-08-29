@@ -8,11 +8,17 @@ import { prisma } from '../prisma/script'
 class ProductServices implements IProductServices {
   async getAllProducts({
     businessId,
-  }: Pick<Product, 'businessId'>): Promise<Product[]> {
+    limit,
+    page,
+  }: Pick<Product, 'businessId'> & { limit?: number; page?: number }): Promise<
+    Product[]
+  > {
     const products = await prisma.product.findMany({
       include: {
         category: true,
       },
+      skip: limit && page ? (page - 1) * limit : 0,
+      take: limit || 10,
       where: { businessId },
     })
 
@@ -79,6 +85,9 @@ class ProductServices implements IProductServices {
         quantity,
         categoryId,
         businessId,
+      },
+      include: {
+        category: true,
       },
     })
 

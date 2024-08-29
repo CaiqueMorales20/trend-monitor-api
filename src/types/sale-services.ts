@@ -5,8 +5,17 @@ type SaleInput = {
   id: number
 }[]
 
+type LimitType = {
+  limit?: number
+  page?: number
+}
+
 interface ISaleServices {
-  getAllSales({ businessId }: Pick<Sale, 'businessId'>): Promise<Sale[]>
+  getAllSales({
+    businessId,
+    limit,
+    page,
+  }: Pick<Sale, 'businessId'> & LimitType): Promise<Sale[]>
 
   createSale({
     products,
@@ -17,4 +26,4 @@ interface ISaleServices {
   }): Promise<Sale>
 }
 
-export type { ISaleServices, SaleInput }
+export type { ISaleServices, SaleInput, LimitType }

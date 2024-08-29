@@ -1,11 +1,21 @@
 import type { Sale } from '@prisma/client'
-import type { ISaleServices, SaleInput } from '../types/sale-services'
+import type {
+  ISaleServices,
+  LimitType,
+  SaleInput,
+} from '../types/sale-services'
 import { prisma } from '../prisma/script'
 
 class SaleServices implements ISaleServices {
-  async getAllSales({ businessId }: Pick<Sale, 'businessId'>): Promise<Sale[]> {
+  async getAllSales({
+    businessId,
+    limit,
+    page,
+  }: Pick<Sale, 'businessId'> & LimitType): Promise<Sale[]> {
     const sales = await prisma.sale.findMany({
       where: { businessId },
+      skip: limit && page ? (page - 1) * limit : 0,
+      take: limit || 10,
       include: {
         products: {
           include: {
