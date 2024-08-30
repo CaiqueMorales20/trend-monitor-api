@@ -32,18 +32,6 @@ productRouter.get('/', async (req: CustomRequest, res: Response) => {
   }
 })
 
-productRouter.get('/:id', async (req: Request, res: Response) => {
-  const id = Number(req.params.id)
-
-  try {
-    const business = await productServices.getProductById({ id })
-
-    res.status(200).json(business)
-  } catch (err) {
-    res.status(400).send(err)
-  }
-})
-
 productRouter.get('/most-sold', async (req: CustomRequest, res: Response) => {
   const businessId = req.user!.businessId
 
@@ -53,6 +41,18 @@ productRouter.get('/most-sold', async (req: CustomRequest, res: Response) => {
     })
 
     res.status(200).json(mostSoldProducts)
+  } catch (err) {
+    res.status(400).send('erro aqui')
+  }
+})
+
+productRouter.get('/:id', async (req: Request, res: Response) => {
+  const id = Number(req.params.id)
+
+  try {
+    const business = await productServices.getProductById({ id })
+
+    res.status(200).json(business)
   } catch (err) {
     res.status(400).send(err)
   }
