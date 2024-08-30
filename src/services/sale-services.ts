@@ -62,6 +62,19 @@ class SaleServices implements ISaleServices {
       },
     })
 
+    await Promise.all(
+      products.map(({ id, quantity }) =>
+        prisma.product.update({
+          where: { id },
+          data: {
+            quantity: {
+              decrement: quantity,
+            },
+          },
+        }),
+      ),
+    )
+
     // const newSaleProduct = await prisma.saleProduct.findUnique({
     //   where: { id: newSale.id },
     // })

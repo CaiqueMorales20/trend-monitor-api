@@ -18,6 +18,8 @@ interface IProductServices {
     totalCount: number
   }>
 
+  getProductById({ id }: Pick<Product, 'id'>): Promise<Product | null>
+
   getMostSoldProducts({
     businessId,
   }: Pick<Product, 'businessId'>): Promise<ProductWithSoldQuantity[]>

@@ -29,6 +29,14 @@ class ProductServices implements IProductServices {
     return { products, totalCount }
   }
 
+  async getProductById({ id }: Pick<Product, 'id'>): Promise<Product | null> {
+    const product = await prisma.product.findUnique({
+      where: { id },
+    })
+
+    return product
+  }
+
   async getMostSoldProducts({
     businessId,
   }: Pick<Product, 'businessId'>): Promise<ProductWithSoldQuantity[]> {
